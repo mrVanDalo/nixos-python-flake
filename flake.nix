@@ -18,6 +18,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ ./nix/formatter.nix ];
       systems = [ "x86_64-linux" ];
+
       perSystem =
         { pkgs, self', ... }:
         with pkgs;
@@ -28,5 +29,13 @@
           };
           checks = self'.packages;
         };
+
+      # override all packages in this overlay
+      flake = {
+        overlays.default = final: prev: {
+          matrix-synapse = self.packages.${prev.system}.matrix-synapse;
+          yubioath-flutter = self.packages.${prev.system}.yubioath-flutter;
+        };
+      };
     };
 }

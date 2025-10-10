@@ -4,3 +4,14 @@ holds a bunch of python packaages which will be separately
 updated because they break very frequently.
 
 This makes it easier for me to update my nixos-config.
+
+== How to use
+
+[source,nix]
+----
+pkgs = import nixpkgs {
+  inherit system;
+  overlays = [ inputs.nixos-python-flake.overlays.default ];
+};
+----
+

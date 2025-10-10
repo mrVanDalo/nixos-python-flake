@@ -24,7 +24,7 @@ jobs:
       # https://nix.dev/guides/recipes/continuous-integration-github-actions
       - name: login attic
         run: |
-          nix-shell -p attic-client --run "attic login orbi ${{ var.ATTIC_ENDPOINT }} ${{ secrets.ATTIC_TOKEN }}"
+          nix-shell -p attic-client --run "attic login orbi ${{ vars.ATTIC_ENDPOINT }} ${{ secrets.ATTIC_TOKEN }}"
 
       - name: update nix flakes
         run: nix flake update

@@ -1,0 +1,6 @@
+= python package flake
+
+holds a bunch of python packaages which will be separately
+updated because they break very frequently.
+
+This makes it easier for me to update my nixos-config.

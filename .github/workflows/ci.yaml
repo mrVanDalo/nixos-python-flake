@@ -1,0 +1,48 @@
+name: Update flake.lock
+on:
+  workflow_dispatch: # allows manual triggering
+  schedule:
+    #- cron: "0 0 * * 0" # runs weekly on Sunday at 00:00
+    - cron: "30 2/6 * * *" # not to frequent, GitHub only allows a few pulls per hour
+
+permissions:
+  contents: write
+
+jobs:
+  update-flake-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      # https://nix.dev/guides/recipes/continuous-integration-github-actions
+      - name: login attic
+        run: |
+          nix-shell -p attic-client --run "attic login orbi ${{ var.ATTIC_ENDPOINT }} ${{ secrets.ATTIC_TOKEN }}"
+
+      - name: update nix flakes
+        run: nix flake update
+
+      - name: nix
+        run: |
+          set -x
+          nix-fast-build --no-nom -j 1 --no-link --attic-cache orbi:cache
+
+      - name: commit & push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action :robot:"
+
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m ":arrow_up: nix flake update"
+            git push
+          else
+            echo "No changes to commit"
+          fi

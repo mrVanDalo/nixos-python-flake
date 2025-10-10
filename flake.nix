@@ -4,6 +4,7 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-2505.url = "github:NixOS/nixpkgs/nixos-25.05";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -23,6 +24,7 @@
         {
           packages = {
             inherit (pkgs) matrix-synapse;
+            yubioath-flutter = inputs.nixpkgs.legacyPackages.${system}.pkgs.yubioath-flutter;
           };
           checks = self'.packages;
         };

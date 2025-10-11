@@ -2,8 +2,7 @@ name: Update flake.lock
 on:
   workflow_dispatch: # allows manual triggering
   schedule:
-    #- cron: "0 0 * * 0" # runs weekly on Sunday at 00:00
-    - cron: "30 2/6 * * *" # not to frequent, GitHub only allows a few pulls per hour
+    - cron: "0 2 * * *" # not to frequent, GitHub only allows a few pulls per hour
 
 permissions:
   contents: write
@@ -35,7 +34,7 @@ jobs:
 
       - name: commit & push
         run: |
-          git config --local user.email "action@github.com"
+          git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action :robot:"
 
           if [[ -n "$(git status --porcelain)" ]]; then

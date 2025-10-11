@@ -29,10 +29,9 @@ jobs:
       - name: update nix flakes
         run: nix flake update
 
-      - name: nix
+      - name: nix build
         run: |
-          set -x
-          nix-fast-build --no-nom -j 1 --no-link --attic-cache orbi:cache
+          nix-shell -p nix-fast-build --run "nix-fast-build --no-nom -j 1 --no-link --attic-cache orbi:cache"
 
       - name: commit & push
         run: |
